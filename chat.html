@@ -14,19 +14,19 @@
   </head>
   <body>
     <div class="chat-wrapper">
-      <h1 class="title">AAC</h1>
-      <h2 class="roomName">채팅방 이름</h2>
+      <h1 class="title"><button id="hbtn">AAC</button></h1>
       <div class="chats">
         <div class="top">
-          <div class="face">faqwdqdce</div>
+          <div class="face">얼굴</div>
           <div class="aac">
             <div class="aacTop">aac탑</div>
-            <div class="aacBot">
-              <textarea name="" id="textarea" cols="30" rows="10"></textarea>
-            </div>
+            <div class="aacBot">aac바탐</div>
           </div>
         </div>
-        <div class="bottom">2</div>
+        <div class="bottom">
+          <textarea name="textarea" id="textarea" cols="30" rows="10">
+          </textarea>
+        </div>
       </div>
     </div>
     <div class="spendChat">
@@ -39,6 +39,7 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script src="chat.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

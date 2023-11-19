@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="no-js">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chat</title>
-    <link rel="stylesheet" type="text/css" href="css/chat.css" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AACom</title>
+
+    <!--==================================================================
+			CSS Stylesheets
+		==================================================================-->
+    <link rel="stylesheet" type="text/css" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -13,34 +20,119 @@
     />
   </head>
   <body>
-    <div class="chat-wrapper">
-      <h1 class="title">AAC</h1>
-      <h2 class="roomName">채팅방 이름</h2>
-      <div class="chats">
-        <div class="top">
-          <div class="face">얼굴</div>
-          <div class="aac">
-            <div class="aacTop">aac탑</div>
-            <div class="aacBot">aac바탐</div>
+    <!--page-borders-->
+
+    <!--menu-btn-->
+    <a href="#" class="menu-btn">
+      <span class="lines">
+        <span class="l1"></span>
+        <span class="l2"></span>
+        <span class="l3"></span>
+      </span>
+    </a>
+
+    <div id="main-wrapper">
+      <!--==================================================================
+				Main Intro Section
+			==================================================================-->
+      <section id="intro" class="section intro-section">
+        <div class="container">
+          <div class="row intro-cols">
+            <div class="col-md-6 col-md-push-6">
+              <div class="phone">
+                <div class="phone-img">
+                  <img src="img/phone1.png" alt />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-md-pull-6">
+              <div class="v-align">
+                <div class="inner">
+                  <div class="intro-text">
+                    <h1>AAC</h1>
+                    <p>
+                      This is the helpful app who can`t speak or communicate
+                      someone, they can communicate using AAC. Give it a try
+                    </p>
+                    <div
+                      id="login-wrapper"
+                      class="login-wrapper"
+                      style="display: block"
+                    >
+                      <h2>Login</h2>
+                      <form method="post" action="서버의url" id="login-form">
+                        <input
+                          type="text"
+                          name="userName"
+                          placeholder="Email"
+                        />
+                        <input
+                          type="password"
+                          name="userName"
+                          placeholder="Email"
+                          autocomplete="username"
+                        />
+                        <input type="submit" value="Login" />
+                      </form>
+                      <button class="membership" onclick="loginPage()">
+                        회원가입
+                      </button>
+                    </div>
+                    <div
+                      id="login-success-wrapper"
+                      class="login-success-wrapper"
+                      style="display: none"
+                    >
+                      <h2>???님 반갑습니다</h2>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-lg"
+                      >
+                        채팅방 만들기
+                      </button>
+                      <div class="space"></div>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-lg"
+                      >
+                        채팅방 참여하기
+                      </button>
+                      <div class="space"></div>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-lg"
+                      >
+                        AAC 커스터마이징
+                      </button>
+                    </div>
+                    <div class="intro-download-btns">
+                      <a href="#" class="app-btn">
+                        <img src="img/appstore.png" alt />
+                      </a>
+                      <a href="#" class="app-btn">
+                        <img src="img/googleplay.png" alt />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="bottom">
-          <textarea name="textarea" id="textarea" cols="30" rows="10">
-          </textarea>
-        </div>
-      </div>
+      </section>
     </div>
-    <div class="spendChat">
-      <input id="input1" type="text" placeholder="입력해주세요!" />
-      <button id="input2">보내기</button>
-    </div>
+    <script src="main.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="app.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"
+      integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </body>
 </html>

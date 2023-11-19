@@ -102,3 +102,8 @@
   max-height: 100%;
   border-radius: 10px;
 }
+
+#hbtn {
+  border: none;
+  outline: none;
+}
