@@ -25,15 +25,19 @@ const io = new Server(httpServer, {
 io.on("connection", (socket) => {
   console.log("A user connected");
   // 이름 전달
-  socket.on("setUsername", (userName) => {
-    socket.userName = userName;
-    console.log("User set username to:", userName);
-  });
+  // socket.on("setUsername", (userName) => {
+  //   socket.userName = userName;
+  //   console.log("User set username to:", userName);
+  // });
 
   // 클라이언트에서 메시지를 받으면 모든 클라이언트에게 전파
-  socket.on("message", (data) => {
-    console.log("Received message:", data);
-    io.emit("message", data);
+  // socket.on("message", (data) => {
+  //   console.log("Received message:", data);
+  //   io.emit("message", data);
+  // });
+  socket.on("message", (message, userName) => {
+    console.log("Received message:", message);
+    io.emit("message", message, userName);
   });
 
   // 연결이 끊어지면 로그 출력
