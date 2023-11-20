@@ -43,7 +43,9 @@ io.on("connection", (socket) => {
 
   // 미디어 스트림을 받았을 때의 이벤트 핸들러
   socket.on("stream", (stream) => {        
-    io.emit("newParticipant", stream);
+    //변경전
+    //io.emit("newParticipant", stream);
+    socket.broadcast.emit("newParticipant", stream);
   });
 
   socket.on("message", (message, userName) => {
@@ -56,6 +58,7 @@ io.on("connection", (socket) => {
     console.log("A user disconnected");
   });
 });
+
 httpServer.listen(3000, () => {
   console.log("server listening on port");
 });

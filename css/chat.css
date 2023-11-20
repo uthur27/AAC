@@ -48,18 +48,21 @@
 }
 
 .face {
-  background-color: aquamarine;
+  background-color:#fff;
   flex: 0.3;  
   flex-direction: column; 
+  border-width : 1px;
+  border-style:solid;
 }
 
-#myFace {
+#myFace{  
   border-radius: 30px;
-    width:30%;
-    height:30%;
-    margin-top: 20px;
-    margin-left: 60px;
+  width:85%;
+  height:80%;
+  margin-top: 5px;
+    
 }
+
 
 .aac {
   display: flex;
