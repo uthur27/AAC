@@ -1,3 +1,4 @@
+let userName;
 document.addEventListener("DOMContentLoaded", () => {
   // script 태그를 사용하여 socket.io-client 라이브러리 불러오기
   const script = document.createElement("script");
@@ -10,6 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const socket = io("http://localhost:3000");
 
+    // 사용자 이름 가져오기
+    userName = getCookie("userName");
+
+    // 만약 사용자 이름이 존재한다면, 서버로 전송
+    // if (userName) {
+    //   socket.emit("setUsername", userName);
+    // }
+    
     const messageInput = document.getElementById("input1");
     const sendButton = document.getElementById("input2");
     const chatTextarea = document.getElementById("textarea");
@@ -27,16 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // 서버로 메시지 전송
     function sendMessage() {
       const message = messageInput.value;
-      if (message.trim() !== "") {
-        socket.emit("message", message);
-        messageInput.value = "";
+      if (message.trim() !== "") {        
+        socket.emit("message", message, userName);
+        messageInput.value = "";                                
+        chatTextarea.value += `${userName} : ${message}\n`;
+        chatTextarea.scrollTop = chatTextarea.scrollHeight;
       }
     }
 
     //서버에서 메시지 받음
-    socket.on("message", (message) => {
-      chatTextarea.value += `${message}\n`;
-      chatTextarea.scrollTop = chatTextarea.scrollHeight;
+    socket.on("message", (message, userN) => {
+      if(userN == userName) {        
+      }
+      else {
+        chatTextarea.value += `${userN} : ${message}\n`;
+        chatTextarea.scrollTop = chatTextarea.scrollHeight;
+      }      
     });
   };
 });
@@ -45,3 +60,16 @@ document.getElementById("hbtn").addEventListener("click", function () {
   // chat 페이지에서 AAC 버튼 누를 시 홈페이지(index.html)로 이동
   window.location.href = "index.html";
 });
+
+
+// main.js에서 쿠키를 통해 userName 값을 갖고 오는 함수
+function getCookie(name) {
+  const cookies = document.cookie.split("; ");
+  for (const cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split("=");
+    if (cookieName === name) {
+      return cookieValue;
+    }
+  }
+  return null;
+}
