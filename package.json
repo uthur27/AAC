@@ -18,5 +18,12 @@
     "@babel/node": "^7.22.19",
     "@babel/preset-env": "^7.23.3"
   },
-  "type": "module"
+  "type": "module",
+  "name": "aac",
+  "version": "1.0.0",
+  "main": "main.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
