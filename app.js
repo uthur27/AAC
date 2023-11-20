@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   script.onload = () => {
     const socket = io("http://localhost:3000");
 
-    let userName = getCookie("userName");
+    userName = getCookie("userName");
     const messageInput = document.getElementById("input1");
     const sendButton = document.getElementById("input2");
     const chatTextarea = document.getElementById("textarea");
@@ -73,31 +73,37 @@ document.addEventListener("DOMContentLoaded", () => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {          
-          myStream = stream;
+          myStream = stream;          
           myFace.srcObject = stream;
 
           // 서버에 화상 통화 시작 메시지 전송
           socket.emit("startVideoCall", userName);
 
           // 서버로 자신의 미디어 스트림 전송
-          socket.emit("stream", stream);          
+          socket.emit("stream", stream);      
         })
+        
         .catch((error) => {
           console.error("Error accessing media devices:", error);
         });
-    }
-
-    // 미디어 스트림을 받았을 때의 이벤트 핸들러
-    socket.on("stream", (stream) => {    
-      io.emit("newParticipant", stream);    
-    });
+    }   
     // 새로운 참가자가 화상 통화에 참여할 때의 처리
     socket.on("newParticipant", (participantStream) => {
-        console.log("상대방의 stream 정보를 받았습니다");
-        console.log(participantStream);
+      console.log("상대방의 stream 정보를 받았습니다");
+      console.log(participantStream);
+    
+      // 추가: 미디어 스트림인지 확인
+      if (participantStream instanceof MediaStream) {
         peerFace.srcObject = participantStream;
+      } else {
+        console.error("유효한 미디어 스트림이 아닙니다:", participantStream);
+    
+        // 객체의 속성이나 내용을 콘솔에 출력하여 디버깅
+        for (const key in participantStream) {
+          console.log(key, participantStream[key]);
+        }
       }
-    );
+    });
 
     // 화상 통화 관련 함수들
     function handleMuteClick(stream) {
