@@ -35,6 +35,17 @@ io.on("connection", (socket) => {
   //   console.log("Received message:", data);
   //   io.emit("message", data);
   // });
+
+  // 화상 통화 시작 메시지를 받았을 때의 이벤트 핸들러
+  socket.on("startVideoCall", (userName) => {
+    console.log(`${userName} started a video call`);
+  });
+
+  // 미디어 스트림을 받았을 때의 이벤트 핸들러
+  socket.on("stream", (stream) => {        
+    io.emit("newParticipant", stream);
+  });
+
   socket.on("message", (message, userName) => {
     console.log("Received message:", message);
     io.emit("message", message, userName);

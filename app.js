@@ -1,27 +1,42 @@
 let userName;
+let myPeerConnection; // WebRTC peer connection 객체
+
 document.addEventListener("DOMContentLoaded", () => {
-  // script 태그를 사용하여 socket.io-client 라이브러리 불러오기
   const script = document.createElement("script");
   script.src = "https://cdn.socket.io/4.1.2/socket.io.min.js";
   document.head.appendChild(script);
 
-  // 스크립트 로딩이 완료된 후에 실행되는 이벤트
   script.onload = () => {
-    // 라이브러리 로딩이 완료되면 io 함수를 사용할 수 있음
-
     const socket = io("http://localhost:3000");
 
-    // 사용자 이름 가져오기
-    userName = getCookie("userName");
-
-    // 만약 사용자 이름이 존재한다면, 서버로 전송
-    // if (userName) {
-    //   socket.emit("setUsername", userName);
-    // }
-    
+    let userName = getCookie("userName");
     const messageInput = document.getElementById("input1");
     const sendButton = document.getElementById("input2");
     const chatTextarea = document.getElementById("textarea");
+    const myFace = document.getElementById("myFace");
+    const peerFace = document.getElementById("peerFace");
+
+    // 비디오 채팅과 관련된 변수들
+    const startButton = document.getElementById("startBtn");
+    const muteButton = document.getElementById("muteBtn");
+    const cameraButton = document.getElementById("cameraBtn");
+    let myStream;
+    let peerStream;
+
+    // 화상 통화 시작 버튼 클릭 시
+    startButton.addEventListener("click", () => {
+      startVideoCall(socket);
+    });
+
+    // 음소거 버튼 클릭 시
+    muteButton.addEventListener("click", () => {
+      handleMuteClick(myStream);
+    });
+
+    // 카메라 On/Off 버튼 클릭 시
+    cameraButton.addEventListener("click", () => {
+      handleCameraClick(myStream);
+    });
 
     // 클릭 이벤트 핸들러
     sendButton.addEventListener("click", () => sendMessage());
@@ -36,33 +51,70 @@ document.addEventListener("DOMContentLoaded", () => {
     // 서버로 메시지 전송
     function sendMessage() {
       const message = messageInput.value;
-      if (message.trim() !== "") {        
+      if (message.trim() !== "") {
         socket.emit("message", message, userName);
-        messageInput.value = "";                                
+        messageInput.value = "";
         chatTextarea.value += `${userName} : ${message}\n`;
         chatTextarea.scrollTop = chatTextarea.scrollHeight;
       }
     }
 
-    //서버에서 메시지 받음
+    // 서버에서 메시지 받음
     socket.on("message", (message, userN) => {
-      if(userN == userName) {        
-      }
-      else {
+      if (userN == userName) {
+      } else {
         chatTextarea.value += `${userN} : ${message}\n`;
         chatTextarea.scrollTop = chatTextarea.scrollHeight;
-      }      
+      }
     });
+
+    // 화상 통화를 시작하는 함수
+    function startVideoCall(socket) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {          
+          myStream = stream;
+          myFace.srcObject = stream;
+
+          // 서버에 화상 통화 시작 메시지 전송
+          socket.emit("startVideoCall", userName);
+
+          // 서버로 자신의 미디어 스트림 전송
+          socket.emit("stream", stream);          
+        })
+        .catch((error) => {
+          console.error("Error accessing media devices:", error);
+        });
+    }
+
+    // 미디어 스트림을 받았을 때의 이벤트 핸들러
+    socket.on("stream", (stream) => {    
+      io.emit("newParticipant", stream);    
+    });
+    // 새로운 참가자가 화상 통화에 참여할 때의 처리
+    socket.on("newParticipant", (participantStream) => {
+        console.log("상대방의 stream 정보를 받았습니다");
+        console.log(participantStream);
+        peerFace.srcObject = participantStream;
+      }
+    );
+
+    // 화상 통화 관련 함수들
+    function handleMuteClick(stream) {
+      stream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+    }
+
+    function handleCameraClick(stream) {
+      stream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
+    }
   };
 });
 
-document.getElementById("hbtn").addEventListener("click", function () {
-  // chat 페이지에서 AAC 버튼 누를 시 홈페이지(index.html)로 이동
+// chat 페이지에서 AAC 버튼 누를 시 홈페이지(index.html)로 이동하는 함수
+document.getElementById("hbtn").addEventListener("click", function() {
   window.location.href = "index.html";
-});
+})
 
-
-// main.js에서 쿠키를 통해 userName 값을 갖고 오는 함수
 function getCookie(name) {
   const cookies = document.cookie.split("; ");
   for (const cookie of cookies) {
@@ -73,3 +125,4 @@ function getCookie(name) {
   }
   return null;
 }
+
