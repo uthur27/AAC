@@ -1,4 +1,8 @@
 #ver 2.1_231118
+#   .env설정파일 확인 후 실행
+#   pip install -r requirements.txt 
+
+#==========================위 명령이 성공하면 아래는 안해도됨
 # pip install openai
 # pip install dotenv
 # pip install load_dotenv
