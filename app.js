@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   script.src = "https://cdn.socket.io/4.1.2/socket.io.min.js";
   document.head.appendChild(script);
   const messageInput = document.getElementById("input1");
+  const myFace = document.getElementById("myFace");
+  const peerFace = document.getElementById("peerFace");
 
   script.onload = () => {
     const socket = io("http://localhost:3000");
@@ -14,8 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendButton = document.getElementById("input2");
     const messageInput = document.getElementById("input1");
     const chatTextarea = document.getElementById("textarea");
-    const myFace = document.getElementById("myFace");
-    const peerFace = document.getElementById("peerFace");
+    
 
     // 비디오 채팅과 관련된 변수들
     const startButton = document.getElementById("startBtn");
@@ -74,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {          
-          myStream = stream;          
-          myFace.srcObject = stream;
+          // myStream = stream;          
+          // myFace.srcObject = stream;
 
           // 서버에 화상 통화 시작 메시지 전송
           socket.emit("startVideoCall", userName);
@@ -90,20 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }   
     // 새로운 참가자가 화상 통화에 참여할 때의 처리
     socket.on("newParticipant", (participantStream) => {
-      console.log("상대방의 stream 정보를 받았습니다");
-      console.log(participantStream);
-    
-      // 추가: 미디어 스트림인지 확인
-      if (participantStream instanceof MediaStream) {
-        peerFace.srcObject = participantStream;
-      } else {
-        console.error("유효한 미디어 스트림이 아닙니다:", participantStream);
-    
-        // 객체의 속성이나 내용을 콘솔에 출력하여 디버깅
-        for (const key in participantStream) {
-          console.log(key, participantStream[key]);
-        }
-      }
+      console.log("클라이언트에서 stream을 받았어요");
+      myFace.srcObject = participantStream; 
     });
 
     // 화상 통화 관련 함수들

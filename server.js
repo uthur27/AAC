@@ -45,6 +45,7 @@ io.on("connection", (socket) => {
   socket.on("stream", (stream) => {        
     //변경전
     //io.emit("newParticipant", stream);
+    console.log("strea 전송!");
     socket.broadcast.emit("newParticipant", stream);
   });
 
