@@ -85,7 +85,6 @@ class OpenAIGpt:
     def run(self, query):
         EnQuery = self.translator(query)
         if EnQuery: 
-            print(EnQuery)
             extracted_targetWord = self.mainChaSeKi(EnQuery)
             if extracted_targetWord:
                 response = extracted_targetWord

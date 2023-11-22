@@ -4,9 +4,11 @@ import { Server } from "socket.io";
 import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+let pythonResult;
 
 const app = express();
 app.use(cors());
@@ -63,3 +65,36 @@ io.on("connection", (socket) => {
 httpServer.listen(3000, () => {
   console.log("server listening on port");
 });
+
+function getStartPython(text) {
+  return new Promise((resolve, reject) => {
+      const pythonProcess = spawn('python', ['logic.py', text]);
+
+      let result = '';
+
+      pythonProcess.stdout.on('data', (data) => {
+          result += data.toString();
+      });
+
+      pythonProcess.stderr.on('data', (data) => {
+          console.error('Error:', data.toString());
+          reject(data.toString());
+      });
+
+      pythonProcess.on('close', (code) => {
+          if (code === 0) {
+              resolve(result.trim());
+          } else {
+              console.error('Python script exited with code:', code);
+              reject('Non-zero exit code');
+          }
+      });
+  });
+}
+async function run() {
+  try {
+      pythonResult = await getStartPython(text);        
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
