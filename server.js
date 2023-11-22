@@ -37,17 +37,17 @@ io.on("connection", (socket) => {
   // });
 
   // 화상 통화 시작 메시지를 받았을 때의 이벤트 핸들러
-  socket.on("startVideoCall", (userName) => {
-    console.log(`${userName} started a video call`);
-  });
+  // socket.on("startVideoCall", (userName) => {
+  //   console.log(`${userName} started a video call`);
+  // });
 
-  // 미디어 스트림을 받았을 때의 이벤트 핸들러
-  socket.on("stream", (stream) => {        
-    //변경전
-    //io.emit("newParticipant", stream);
-    console.log("strea 전송!");
-    socket.broadcast.emit("newParticipant", stream);
-  });
+  // // 미디어 스트림을 받았을 때의 이벤트 핸들러
+  // socket.on("stream", (stream) => {        
+  //   //변경전
+  //   //io.emit("newParticipant", stream);
+  //   console.log("strea 전송!");
+  //   socket.broadcast.emit("newParticipant", stream);
+  // });
 
   socket.on("message", (message, userName) => {
     console.log("Received message:", message);

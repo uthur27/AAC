@@ -1,6 +1,6 @@
 let userName;
 let myPeerConnection; // WebRTC peer connection 객체
-
+let aacKind;
 document.addEventListener("DOMContentLoaded", () => {
   const script = document.createElement("script");
   script.src = "https://cdn.socket.io/4.1.2/socket.io.min.js";
@@ -18,27 +18,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatTextarea = document.getElementById("textarea");
     
 
-    // 비디오 채팅과 관련된 변수들
-    const startButton = document.getElementById("startBtn");
-    const muteButton = document.getElementById("muteBtn");
-    const cameraButton = document.getElementById("cameraBtn");
-    let myStream;
-    let peerStream;
+    // // 비디오 채팅과 관련된 변수들
+    // const startButton = document.getElementById("startBtn");
+    // const muteButton = document.getElementById("muteBtn");
+    // const cameraButton = document.getElementById("cameraBtn");
+    // let myStream;
+    // let peerStream;
 
-    // 화상 통화 시작 버튼 클릭 시
-    startButton.addEventListener("click", () => {
-      startVideoCall(socket);
-    });
+    // // 화상 통화 시작 버튼 클릭 시
+    // startButton.addEventListener("click", () => {
+    //   startVideoCall(socket);
+    // });
 
-    // 음소거 버튼 클릭 시
-    muteButton.addEventListener("click", () => {
-      handleMuteClick(myStream);
-    });
+    // // 음소거 버튼 클릭 시
+    // muteButton.addEventListener("click", () => {
+    //   handleMuteClick(myStream);
+    // });
 
-    // 카메라 On/Off 버튼 클릭 시
-    cameraButton.addEventListener("click", () => {
-      handleCameraClick(myStream);
-    });
+    // // 카메라 On/Off 버튼 클릭 시
+    // cameraButton.addEventListener("click", () => {
+    //   handleCameraClick(myStream);
+    // });
 
     // 클릭 이벤트 핸들러
     sendButton.addEventListener("click", () => sendMessage());
@@ -70,39 +70,39 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // 화상 통화를 시작하는 함수
-    function startVideoCall(socket) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {          
-          // myStream = stream;          
-          // myFace.srcObject = stream;
+    // // 화상 통화를 시작하는 함수
+    // function startVideoCall(socket) {
+    //   navigator.mediaDevices
+    //     .getUserMedia({ video: true, audio: true })
+    //     .then((stream) => {          
+    //       // myStream = stream;          
+    //       // myFace.srcObject = stream;
 
-          // 서버에 화상 통화 시작 메시지 전송
-          socket.emit("startVideoCall", userName);
+    //       // 서버에 화상 통화 시작 메시지 전송
+    //       socket.emit("startVideoCall", userName);
 
-          // 서버로 자신의 미디어 스트림 전송
-          socket.emit("stream", stream);      
-        })
+    //       // 서버로 자신의 미디어 스트림 전송
+    //       socket.emit("stream", stream);      
+    //     })
         
-        .catch((error) => {
-          console.error("Error accessing media devices:", error);
-        });
-    }   
-    // 새로운 참가자가 화상 통화에 참여할 때의 처리
-    socket.on("newParticipant", (participantStream) => {
-      console.log("클라이언트에서 stream을 받았어요");
-      myFace.srcObject = participantStream; 
-    });
+    //     .catch((error) => {
+    //       console.error("Error accessing media devices:", error);
+    //     });
+    // }   
+    // // 새로운 참가자가 화상 통화에 참여할 때의 처리
+    // socket.on("newParticipant", (participantStream) => {
+    //   console.log("클라이언트에서 stream을 받았어요");
+    //   myFace.srcObject = participantStream; 
+    // });
 
-    // 화상 통화 관련 함수들
-    function handleMuteClick(stream) {
-      stream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
-    }
+    // // 화상 통화 관련 함수들
+    // function handleMuteClick(stream) {
+    //   stream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+    // }
 
-    function handleCameraClick(stream) {
-      stream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
-    }
+    // function handleCameraClick(stream) {
+    //   stream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
+    // }
   };
 
 // 여기부터 AAC 클릭 관련 함수들////
@@ -327,7 +327,26 @@ subjectBtn.addEventListener("click", ()=>{
 //aac버튼 누를 시 함수
 aacBtn.addEventListener("click", ()=>{
   aacBot.innerHTML = "";  
-  showWeather()
+  "exercise", "daily life", "meals", "places", "weather", "transportation", "et cetera"
+  if(aacKind="exercise") {
+    showHobby();
+  }
+  else if(aacKind="daily life") {
+    showDailylife();
+  }
+  else if(aacKind="meals") {
+    showFood();
+  }
+  else if(aacKind="places") {
+    showPlace();
+  }
+  else if(aacKind="weather") {
+    showWeather();
+  }
+  else {
+    console.log("aac에 맞는 카테고리가 없어요!");
+  }
+  
 })
 //동사버튼 누를 시 함수
 verbBtn.addEventListener("click", ()=>{
