@@ -20,7 +20,7 @@ app.use(express.static(__dirname));
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://aacom.netlify.app",
   },
 });
 
