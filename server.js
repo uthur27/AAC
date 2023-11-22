@@ -52,9 +52,53 @@ io.on("connection", (socket) => {
   // });
 
   socket.on("message", (message, userName) => {
-    console.log("Received message:", message);
-    io.emit("message", message, userName);
+    console.log("Received message:", message);    
+    socket.broadcast.emit("message", message, userName);
+    // io.emit("message", message, userName);        
+    // run(message).then((pythonResult) => {
+    //   console.log("자 이제 서버가 클라이언트로 결과값을 보냅니다. 결과값은 : ", pythonResult);
+    //   socket.broadcast.emit("aac", pythonResult);
+    //   console.log("자 이제 서버가 클라이언트로 결과값을 보냅니다. 결과값은 : ", pythonResult);
+    // })        
+    run(message);
   });
+
+  function getStartPython(text) {
+    return new Promise((resolve, reject) => {
+        const pythonProcess = spawn('python', ['logic.py', text]);
+  
+        let result = '';
+  
+        pythonProcess.stdout.on('data', (data) => {
+            result += data.toString();
+        });
+  
+        pythonProcess.stderr.on('data', (data) => {
+            console.error('Error:', data.toString());
+            reject(data.toString());
+        });
+  
+        pythonProcess.on('close', (code) => {
+            if (code === 0) {
+                resolve(result.trim());
+            } else {
+                console.error('Python script exited with code:', code);
+                reject('Non-zero exit code');
+            }
+        });
+    });
+  }
+  
+  async function run(message) {
+    try {
+        pythonResult = await getStartPython(message);          
+        console.log("파이썬 로직을 정상적으로 성공했고 그 결과값은 : ", pythonResult);      
+        socket.broadcast.emit("aac", pythonResult);
+    } catch (error) {
+        console.error('Error:', error);
+        throw error; // 에러가 발생한 경우에는 예외를 다시 throw하여 호출자에게 전파
+    }
+  }
 
   // 연결이 끊어지면 로그 출력
   socket.on("disconnect", () => {
@@ -66,35 +110,39 @@ httpServer.listen(3000, () => {
   console.log("server listening on port");
 });
 
-function getStartPython(text) {
-  return new Promise((resolve, reject) => {
-      const pythonProcess = spawn('python', ['logic.py', text]);
+// function getStartPython(text) {
+//   return new Promise((resolve, reject) => {
+//       const pythonProcess = spawn('python', ['logic.py', text]);
 
-      let result = '';
+//       let result = '';
 
-      pythonProcess.stdout.on('data', (data) => {
-          result += data.toString();
-      });
+//       pythonProcess.stdout.on('data', (data) => {
+//           result += data.toString();
+//       });
 
-      pythonProcess.stderr.on('data', (data) => {
-          console.error('Error:', data.toString());
-          reject(data.toString());
-      });
+//       pythonProcess.stderr.on('data', (data) => {
+//           console.error('Error:', data.toString());
+//           reject(data.toString());
+//       });
 
-      pythonProcess.on('close', (code) => {
-          if (code === 0) {
-              resolve(result.trim());
-          } else {
-              console.error('Python script exited with code:', code);
-              reject('Non-zero exit code');
-          }
-      });
-  });
-}
-async function run() {
-  try {
-      pythonResult = await getStartPython(text);        
-  } catch (error) {
-      console.error('Error:', error);
-  }
-}
+//       pythonProcess.on('close', (code) => {
+//           if (code === 0) {
+//               resolve(result.trim());
+//           } else {
+//               console.error('Python script exited with code:', code);
+//               reject('Non-zero exit code');
+//           }
+//       });
+//   });
+// }
+
+// async function run(message) {
+//   try {
+//       pythonResult = await getStartPython(message);          
+//       console.log("파이썬 로직을 정상적으로 성공했고 그 결과값은 : ", pythonResult);      
+//       socket.broadcast.emit("aac", pythonResult);
+//   } catch (error) {
+//       console.error('Error:', error);
+//       throw error; // 에러가 발생한 경우에는 예외를 다시 throw하여 호출자에게 전파
+//   }
+// }

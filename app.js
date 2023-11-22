@@ -1,6 +1,6 @@
 let userName;
 let myPeerConnection; // WebRTC peer connection 객체
-let aacKind;
+let aacKind = "d"
 document.addEventListener("DOMContentLoaded", () => {
   const script = document.createElement("script");
   script.src = "https://cdn.socket.io/4.1.2/socket.io.min.js";
@@ -68,6 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
         chatTextarea.value += `${userN} : ${message}\n`;
         chatTextarea.scrollTop = chatTextarea.scrollHeight;
       }
+    });
+
+    socket.on("aac", (pythonResult) =>{
+      aacKind = pythonResult;
+      console.log("서버에서 파이썬 결과값을 정상적으로 받았고 그 값은 : ", aacKind);
     });
 
     // // 화상 통화를 시작하는 함수
@@ -326,21 +331,21 @@ subjectBtn.addEventListener("click", ()=>{
 })
 //aac버튼 누를 시 함수
 aacBtn.addEventListener("click", ()=>{
-  aacBot.innerHTML = "";  
-  "exercise", "daily life", "meals", "places", "weather", "transportation", "et cetera"
-  if(aacKind="exercise") {
+  aacBot.innerHTML = "";    
+  
+  if(aacKind=="exercise") {
     showHobby();
   }
-  else if(aacKind="daily life") {
+  else if(aacKind=="daily life") {
     showDailylife();
   }
-  else if(aacKind="meals") {
+  else if(aacKind=="meals") {
     showFood();
   }
-  else if(aacKind="places") {
+  else if(aacKind=="places") {
     showPlace();
   }
-  else if(aacKind="weather") {
+  else if(aacKind=="weather") {
     showWeather();
   }
   else {

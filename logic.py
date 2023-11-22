@@ -36,16 +36,12 @@ class OpenAIGpt:
                     if extracted_targetWord in targetWord:
                         return extracted_targetWord
                     else :
-                        print("2")
                         assistant_content = self.get_assistant_response(sendMessage)
                         life += 1
-                        print(str(life)+"번쨰 시도입니다.")
                         continue
                 else:
-                    print("1")
                     assistant_content = self.get_assistant_response(sendMessage)
                     life += 1
-                    print(str(life)+"번쨰 시도입니다.")
                     continue                                
             return None
         except Exception as e:
