@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const peerFace = document.getElementById("peerFace");
 
   script.onload = () => {
-    const socket = io("https://aacom.netlify.app");
+    const socket = io("http://localhost:3000");
 
     userName = getCookie("userName");    
     const sendButton = document.getElementById("input2");

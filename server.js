@@ -1,11 +1,10 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { spawn } from 'child_process';
-
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +19,8 @@ app.use(express.static(__dirname));
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://aacom.netlify.app",
+    origin: "*",
+    methods: ["GET", "POST"]
   },
 });
 
